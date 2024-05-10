@@ -1,15 +1,15 @@
 //authantication controllerimport crypto from "crypto";
-const bcrypt = require ("bcrypt");
-const  User = require ("../model/Auth/Auth.model")
+const bcrypt = require("bcrypt");
+const User = require("../model/Auth/Auth.model");
 const nodemailer = require("nodemailer");
 
-const saltRounds =10
+const saltRounds = 10;
 
 // Function to generate a random token
 const generateToken = () => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
-  const tokenLength = 128; // Adjust the token length as needed
+  const tokenLength = 64; // Adjust the token length as needed
 
   let token = "";
   for (let i = 0; i < tokenLength; i++) {
@@ -44,7 +44,7 @@ const userSignup = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
       const newUser = new User({ name, email, password: hashedPassword, role });
       await newUser.save();
-      return res.status(201).json({ msg: 'Successfully signed up' });
+      return res.status(201).json({ msg: "Successfully signed up" });
     } catch (error) {
       console.error(error);
       return res.status(500).send("Internal server error");
@@ -52,43 +52,43 @@ const userSignup = async (req, res) => {
   }
 };
 
+const userLogin = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
 
-  const userLogin = async (req, res) => {
-    try {
-      const user = await User.findOne({ email: req.body.email });
-  
-      // Check if user exists
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-  
-      // Compare hashed password
-      const passwordMatch = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
-  
-      if (passwordMatch) {
-        // Passwords match
-        // Generate JWT token from user model
-        const token = user.generateAuthToken();
-  
-        res.setHeader("Authorization", `Bearer ${token}`);
-  
-        return res.status(200).json({ msg: "Login successful"});
-      } else {
-        // Passwords don't match
-        return res.status(401).json({ message: "Incorrect password" });
-      }
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send("Internal server error");
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-  };
+
+    // Compare hashed password
+    const passwordMatch = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (passwordMatch) {
+      // Passwords match
+      // Generate JWT token from user model
+      const token = user.generateAuthToken();
+
+      res.setHeader("Authorization", `Bearer ${token}`);
+
+      return res.status(200).json({ msg: "Login successful" });
+    } else {
+      // Passwords don't match
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal server error");
+  }
+};
 const sendResetEmail = async (emailAddress, resetToken) => {
   try {
     // Construct reset password link
-    const resetPasswordLink = `http://localhost:8080/reset-password?token=${resetToken}`;
+    const encodedToken = encodeURIComponent(resetToken);
+    const url = `http://localhost:8080/reset-password/?token=${encodedToken}`;
 
     // Create a transporter using SMTP transport
     const transporter = nodemailer.createTransport({
@@ -109,7 +109,7 @@ const sendResetEmail = async (emailAddress, resetToken) => {
       html: `
         <p>Hello,</p>
         <p>You have requested to reset your password. Please click the link below to reset your password:</p>
-        <p><a href="${resetPasswordLink}">${resetPasswordLink}</a></p>
+        <p><a href="${url}">${url}</a></p>
         <p>If you did not request this, you can safely ignore this email.</p>
       `,
     });
@@ -122,8 +122,10 @@ const sendResetEmail = async (emailAddress, resetToken) => {
 };
 
 // Function to reset password
-const resetPassword = async (req, res) => {
-  let { email, resetToken, newPassword } = req.body;
+
+// Function to handle forgot password request
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -132,10 +134,36 @@ const resetPassword = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (user.resetToken !== resetToken) {
+    // Generate reset token
+    const resetToken = generateToken();
+    user.resetToken = resetToken;
+    console.log(user.resetToken);
+    user.resetTokenExpiration = Date.now() + 900000; // Token expires in 1 hour
+    await user.save();
+
+    // Send reset password email
+    await sendResetEmail(email, resetToken);
+
+    return res.status(200).json({ message: "Reset password email sent" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal server error");
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body; // Access passwords from request body
+  //const token = req.query.token; // Access token from query parameters
+  const decodedToken = decodeURIComponent(req.query.token);
+  try {
+    const user = await User.findOne({ email: email }); // Find user by reset token
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.resetToken !== decodedToken) {
       return res.status(404).json({ message: "Invalid token" });
     }
-
     if (user.resetTokenExpiration < Date.now()) {
       return res.status(401).json({ message: "Reset token has expired" });
     }
@@ -152,30 +180,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// Function to handle forgot password request
-const forgotPassword = async (req, res) => {
-  const { email } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Generate reset token
-    const resetToken = generateToken();
-    user.resetToken = resetToken;
-    user.resetTokenExpiration = Date.now() + 900000; // Token expires in 1 hour
-    await user.save();
-
-    // Send reset password email
-    await sendResetEmail(email, resetToken);
-
-    return res.status(200).json({ message: "Reset password email sent" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send("Internal server error");
-  }
-};
-module.exports= { forgotPassword, resetPassword,userSignup,userLogin };
+module.exports = { forgotPassword, resetPassword, userSignup, userLogin };

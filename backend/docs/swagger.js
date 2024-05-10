@@ -183,6 +183,15 @@ const swaggerDocument =
     "tags": ["Authentication"],
     "parameters": [
       {
+        "in": "query",
+        "name": "token",
+        "description": "The reset token received by the user",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
         "in": "body",
         "name": "resetData",
         "description": "Reset password data",
@@ -194,7 +203,6 @@ const swaggerDocument =
               "type": "string",
               "description": "The email of the user"
             },
-           
             "newPassword": {
               "type": "string",
               "description": "The new password for the user"
@@ -218,7 +226,8 @@ const swaggerDocument =
       }
     }
   }
-        }
+}
+
     },
     "components": {
         "schemas": {
