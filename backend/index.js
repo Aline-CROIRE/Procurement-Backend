@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors=require('cors')
 const configurations = require("../backend/connection/database.js");
 const allRoutes = require("../backend/routers/Auth.js");
 //const ErrorHandler = require("./middlewares/error-handler.js");
@@ -10,7 +11,7 @@ const swaggerDocument = require('./docs/swagger.js');
 // Server middlewares
 const app = express();
 app.use(express.json());
-
+app.use(cors)
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
