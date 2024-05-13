@@ -1,7 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors=require('cors')
-const configurations = require("../backend/connection/database.js");
+const dotenv = require ("dotenv");
+dotenv.config();
+//const configurations = require("../backend/connection/database.js");
 const allRoutes = require("../backend/routers/Auth.js");
 //const ErrorHandler = require("./middlewares/error-handler.js");
 const swaggerUi = require("swagger-ui-express");
@@ -19,13 +21,13 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/", allRoutes);
 
 // Database connectivity
-mongoose.connect(configurations.MONGODB_CONNECTION_STRING)
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING ||'mongodb+srv://niyocroirealine:I3lWKD8AmW27MmyG@cluster0.ufciukm.mongodb.net/Procurement')
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
 // Start server
-app.listen(configurations.PORT, () =>
-  console.log(`Server is running on port ${configurations.PORT}`)
+app.listen(process.env.PORT, () =>
+  console.log(`Server is running on port ${process.env.PORT ||8080}`)
 );
 
 // Error handling middleware
