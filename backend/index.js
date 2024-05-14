@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const cors=require('cors')
 const dotenv = require ("dotenv");
 dotenv.config();
@@ -7,8 +8,8 @@ dotenv.config();
 const allRoutes = require("../backend/routers/Auth.js");
 //const ErrorHandler = require("./middlewares/error-handler.js");
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require('./docs/swagger.js');
- // Import as object
+const swaggerDocument = require("./docs/swagger.js");
+// Import as object
 
  const corsOptions ={
   allowedHeaders:["Authorization","Content-Type"],
@@ -19,7 +20,9 @@ const swaggerDocument = require('./docs/swagger.js');
 // Server middlewares
 const app = express();
 app.use(express.json());
+
 app.use(cors(corsOptions))
+
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -27,7 +30,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/", allRoutes);
 
 // Database connectivity
+
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING ||'mongodb://atlas-sql-6641bd6ca227095d5654b611-ssbeb.a.query.mongodb.net/Procurement?ssl=true&authSource=admin')
+
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
