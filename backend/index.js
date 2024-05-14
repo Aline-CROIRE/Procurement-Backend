@@ -10,10 +10,16 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require('./docs/swagger.js');
  // Import as object
 
+ const corsOptions ={
+  allowedHeaders:["Authorization","Content-Type"],
+  methods:["GET","POST","PUT","DELETE"],
+  orgin:["http://localhost:8080","https://procurement-backend-7jun.onrender.com","http://localhost:5173"],
+ Credentials: true,
+ }
 // Server middlewares
 const app = express();
 app.use(express.json());
-app.use(cors())
+app.use(cors(corsOptions))
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
