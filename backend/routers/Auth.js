@@ -18,10 +18,13 @@ const {
 
 // ###############authroutes##############
 
+const requestController = require('../controller/request.controller.js');
+
 router.post("/auth/signup", userSignup);
 router.post("/auth/login", userLogin);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
+
 
 // Apply authMiddleware to routes that require authentication
 // ###############userroutes##############
@@ -30,5 +33,15 @@ router.post("/user", authMiddleware, isAdmin, UserController.createUser);
 router.put("/user", authMiddleware, isAdmin, UserController.updateUser);
 router.delete("/user", authMiddleware, isAdmin, UserController.deleteUser);
 router.get("/user", authMiddleware, isAdmin, UserController.getAllUser);
+
+
+
+// requistion routers
+router.post('/create', requestController.createRequest);
+router.get('/allRequest', requestController.getAllRequests);
+router.get('/request/:id', requestController.getRequestById);
+router.patch('/:id/status', requestController.updateRequestStatus);
+router.patch('/:id', requestController.updateRequest);
+router.delete('/:id', requestController.deleteRequest);
 
 module.exports = router;
