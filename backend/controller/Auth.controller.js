@@ -20,7 +20,7 @@ const generateToken = () => {
   return token;
 };
 const userSignup = async (req, res) => {
-  const { name, email, password, confirmPassword, role } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
 
   // Check if password and confirmPassword match
   if (password !== confirmPassword) {
@@ -42,7 +42,7 @@ const userSignup = async (req, res) => {
     try {
       // Hash the password
       const hashedPassword = await bcrypt.hash(password, saltRounds);
-      const newUser = new User({ name, email, password: hashedPassword, role });
+      const newUser = new User({ name, email, password: hashedPassword });
       await newUser.save();
       return res.status(201).json({ msg: "Successfully signed up" });
     } catch (error) {
@@ -73,7 +73,8 @@ const userLogin = async (req, res) => {
       const token = user.generateAuthToken();
 
       res.setHeader("Authorization", `Bearer ${token}`);
-
+      user.tokens = token;
+      await user.save();
       return res.status(200).json({ msg: "Login successful" });
     } else {
       // Passwords don't match

@@ -13,7 +13,7 @@
        "description":"Local host"
       },
       {
-        "url":"https://procurement-backend-2.onrender.com",
+        "url":"https://procurement-backend-3zsr.onrender.com",
         "description":"Deployment Server"
        }
     ],
@@ -61,11 +61,8 @@
                     "confirmPassword": {
                         "type": "string",
                         "description": "The password of the user"
-                      },
-                    "role": {
-                        "type": "string",
-                        "description": "The role of the user"
-                    }
+                      }
+                   
                   
                   
                 }
