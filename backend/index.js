@@ -13,7 +13,7 @@ const swaggerDocument = require('./docs/swagger.js');
 // Server middlewares
 const app = express();
 app.use(express.json());
-app.use(cors)
+app.use(cors())
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -21,7 +21,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/", allRoutes);
 
 // Database connectivity
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING ||'mongodb+srv://niyocroirealine:I3lWKD8AmW27MmyG@cluster0.ufciukm.mongodb.net/Procurement')
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING ||'mongodb://atlas-sql-6641bd6ca227095d5654b611-ssbeb.a.query.mongodb.net/Procurement?ssl=true&authSource=admin')
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 

@@ -7,14 +7,14 @@ const swaggerDocument =
       "description": "API Documentation"
     },
  
-    "basePath": "/",
+    
     "servers":[
       {
        "url":"http://localhost:8080",
        "description":"Local host"
       },
       {
-        "url":"https://procurement-backend-2.onrender.com",
+        "url":"https://procurement-backend-6.onrender.com",
         "description":"Deployment Server"
        }
     ],
