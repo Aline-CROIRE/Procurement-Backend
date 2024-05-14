@@ -14,7 +14,7 @@ const swaggerDocument =
        "description":"Local host"
       },
       {
-        "url":"https://procurement-backend-6.onrender.com",
+        "url":"https://procurement-backend-3zsr.onrender.com",
         "description":"Deployment Server"
        }
     ],
