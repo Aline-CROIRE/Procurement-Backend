@@ -31,7 +31,7 @@ app.use("/", allRoutes);
 
 // Database connectivity
 
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING||'mongodb+srv://vanessabewe:crazylegs@cluster0.cqvcu4t.mongodb.net/procure')
+mongoose.connect('mongodb+srv://vanessabewe:crazylegs@cluster0.cqvcu4t.mongodb.net/procure')
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -42,7 +42,7 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING||'mongodb+srv://vanessabe
 // ... REST of your Express.js code ...
 
 // Start the Express.js server
-const port =process.env.PORT||3000;
+const port =3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
