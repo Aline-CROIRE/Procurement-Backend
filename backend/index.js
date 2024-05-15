@@ -31,7 +31,7 @@ app.use("/", allRoutes);
 
 // Database connectivity
 
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING||'mongodb://localhost:27017/')
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING||'mongodb+srv://vanessabewe:crazylegs@cluster0.cqvcu4t.mongodb.net/procure')
   .then(() => {
     console.log('Connected to MongoDB');
   })
