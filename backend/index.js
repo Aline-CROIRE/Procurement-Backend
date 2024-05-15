@@ -14,7 +14,7 @@ const swaggerDocument = require("./docs/swagger.js");
  const corsOptions ={
   allowedHeaders:["Authorization","Content-Type"],
   methods:["GET","POST","PUT","DELETE"],
-  orgin:["http://localhost:3000","https://procurement-backend-7jun.onrender.com","http://localhost:5173"],
+  orgin:["http://localhost:3000","https://procurement-backend-red.onrender.com/","http://localhost:5173"],
  Credentials: true,
  }
 // Server middlewares
