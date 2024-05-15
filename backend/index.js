@@ -14,7 +14,7 @@ const swaggerDocument = require("./docs/swagger.js");
  const corsOptions ={
   allowedHeaders:["Authorization","Content-Type"],
   methods:["GET","POST","PUT","DELETE"],
-  orgin:["http://localhost:8080","https://procurement-backend-7jun.onrender.com","http://localhost:5173"],
+  orgin:["http://localhost:3000","https://procurement-backend-7jun.onrender.com","http://localhost:5173"],
  Credentials: true,
  }
 // Server middlewares
@@ -31,15 +31,21 @@ app.use("/", allRoutes);
 
 // Database connectivity
 
-mongoose.connect(process.env.MONGODB_CONNECTION_STRING ||'mongodb://atlas-sql-6641bd6ca227095d5654b611-ssbeb.a.query.mongodb.net/Procurement?ssl=true&authSource=admin')
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING||'mongodb://localhost:27017/')
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB', error);
+  });
 
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.log(err));
+// ... REST of your Express.js code ...
 
-// Start server
-app.listen(process.env.PORT, () =>
-  console.log(`Server is running on port ${process.env.PORT ||8080}`)
-);
+// Start the Express.js server
+const port =process.env.PORT||3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 
 // Error handling middleware
 //app.use(ErrorHandler);

@@ -21,7 +21,7 @@ const generateToken = () => {
 };
 const userSignup = async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
-
+console.log('user');
   // Check if password and confirmPassword match
   if (password !== confirmPassword) {
     return res.status(400).json({ message: "Passwords do not match" });
