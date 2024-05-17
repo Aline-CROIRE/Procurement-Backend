@@ -10,11 +10,11 @@ const swaggerDocument =
     
     "servers":[
       {
-       "url":"http://localhost:8080",
+       "url":"http://localhost:3000",
        "description":"Local host"
       },
       {
-        "url":"https://procurement-backend-3zsr.onrender.com",
+        "url":"https://procurement-backend-red.onrender.com/",
         "description":"Deployment Server"
        }
     ],
