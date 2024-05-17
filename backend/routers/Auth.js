@@ -29,10 +29,10 @@ router.post("/reset-password", resetPassword);
 // Apply authMiddleware to routes that require authentication
 // ###############userroutes##############
 
-router.post("/user", authMiddleware, isAdmin, UserController.createUser);
-router.put("/user", authMiddleware, isAdmin, UserController.updateUser);
-router.delete("/user", authMiddleware, isAdmin, UserController.deleteUser);
-router.get("/user", authMiddleware, isAdmin, UserController.getAllUser);
+router.post("/user",  UserController.createUser);
+router.put("/user",  UserController.updateUser);
+router.delete("/user",  UserController.deleteUser);
+router.get("/user",  UserController.getAllUser);
 
 
 
