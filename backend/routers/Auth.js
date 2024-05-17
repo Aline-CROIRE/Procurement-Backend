@@ -6,7 +6,7 @@ const {
   forgotPassword,
   resetPassword,
 } = require("../controller/Auth.controller");
-
+const {applicant,FormToFill} = require('../controller/Supplier.controller.js')
 const UserController = require("../controller/Admin.controller");
 const {
   authMiddleware,
@@ -43,5 +43,10 @@ router.get('/request/:id', requestController.getRequestById);
 router.patch('/:id/status', requestController.updateRequestStatus);
 router.patch('/:id', requestController.updateRequest);
 router.delete('/:id', requestController.deleteRequest);
+
+//application routes
+
+router.post('/form',FormToFill)
+router.get('/candidate',applicant)
 
 module.exports = router;

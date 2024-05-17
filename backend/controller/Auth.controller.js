@@ -21,7 +21,7 @@ const generateToken = () => {
 };
 const userSignup = async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
-console.log('user');
+
   // Check if password and confirmPassword match
   if (password !== confirmPassword) {
     return res.status(400).json({ message: "Passwords do not match" });
@@ -75,7 +75,7 @@ const userLogin = async (req, res) => {
       res.setHeader("Authorization", `Bearer ${token}`);
       user.tokens = token;
       await user.save();
-      return res.status(200).json({ msg: "Login successful" });
+      return res.status(200).json({ msg: "Login successful",user });
     } else {
       // Passwords don't match
       return res.status(401).json({ message: "Incorrect password" });
