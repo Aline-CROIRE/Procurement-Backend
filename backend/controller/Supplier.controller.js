@@ -12,13 +12,12 @@ const applicant =async (req,res) => {
 const FormToFill = async (req, res) => { 
     try {
         // Extract data from the request body
-        const { fullName, email, password, companyName, companyAddress, contactNumber, cv, whyHire } = req.body;
+        const { fullName, email, companyName, companyAddress, contactNumber, cv, whyHire } = req.body;
 
         // Create a new application form object
         const newApplicationForm = new ApplicationForm({
             fullName,
             email,
-            password,
             companyName,
             companyAddress,
             contactNumber,
