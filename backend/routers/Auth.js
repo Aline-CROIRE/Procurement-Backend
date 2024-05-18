@@ -3,10 +3,12 @@ const router = express.Router();
 const {
   userSignup,
   userLogin,
+  userLogout,
   forgotPassword,
   resetPassword,
 } = require("../controller/Auth.controller");
-const {applicant,FormToFill} = require('../controller/Supplier.controller.js')
+const {applicant,FormToFill,selectApplication,
+  deleteRejectedApplications,} = require('../controller/Supplier.controller.js')
 const UserController = require("../controller/Admin.controller");
 const {
   authMiddleware,
@@ -22,6 +24,7 @@ const requestController = require('../controller/request.controller.js');
 
 router.post("/auth/signup", userSignup);
 router.post("/auth/login", userLogin);
+router.post("/auth/logout", userLogout);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
@@ -46,7 +49,9 @@ router.delete('/:id', requestController.deleteRequest);
 
 //application routes
 
-router.post('/form',FormToFill)
+router.post('/form', FormToFill)
+router.post('/select-application',selectApplication)
+router.post('/reject-application',deleteRejectedApplications)
 router.get('/candidate',applicant)
 
 module.exports = router;

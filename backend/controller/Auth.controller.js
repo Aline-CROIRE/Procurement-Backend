@@ -85,6 +85,25 @@ const userLogin = async (req, res) => {
     return res.status(500).send("Internal server error");
   }
 };
+const userLogout = async (req, res) => {
+  try {
+    const token = req.header('Authorization').replace('Bearer ', '');
+    const user = await User.findOne({ 'tokens': token });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Remove the token from the user's tokens array
+    user.tokens = null;
+    await user.save();
+
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal server error");
+  }
+};
 const sendResetEmail = async (emailAddress, resetToken) => {
   try {
     // Construct reset password link
@@ -181,4 +200,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { forgotPassword, resetPassword, userSignup, userLogin };
+module.exports = { forgotPassword, resetPassword, userSignup, userLogin,userLogout };
