@@ -8,7 +8,8 @@ const {
   resetPassword,
 } = require("../controller/Auth.controller");
 const {applicant,FormToFill,selectApplication,
-  deleteRejectedApplications,} = require('../controller/Supplier.controller.js')
+  deleteRejectedApplications, } = require('../controller/Supplier.controller.js')
+  const{tenders,newTender,selectTender,rejectTender}= require('../controller/tender.controller.js')
 const UserController = require("../controller/Admin.controller");
 const {
   authMiddleware,
@@ -54,4 +55,10 @@ router.post('/select-application',selectApplication)
 router.post('/reject-application',deleteRejectedApplications)
 router.get('/candidate',applicant)
 
+//tenders
+
+router.post('/tender', newTender)
+router.post('/select-tender',selectTender)
+router.post('/reject-tender',rejectTender)
+router.get('/tenders',tenders)
 module.exports = router;
