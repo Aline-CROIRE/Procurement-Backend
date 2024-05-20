@@ -29,7 +29,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/", allRoutes);
 
 // Database connectivity
-mongoose.connect('mongodb://localhost:27017')
+mongoose.connect("http://localhost:3000", "https://procurement-backend-red.onrender.com/", "http://localhost:5173")
   .then(() => {
     console.log('Connected to MongoDB');
   })
