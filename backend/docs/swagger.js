@@ -430,7 +430,7 @@ const swaggerDocument =
                   }
                 }
               }
-            }
+         }
           },
           "404": {
             "description": "User not found"
@@ -529,4 +529,5 @@ const swaggerDocument =
         }
     }
 }
+
 module.exports= swaggerDocument
