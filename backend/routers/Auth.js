@@ -44,8 +44,8 @@ router.get("/user",  UserController.getAllUser);
 router.post('/create', requestController.createRequest);
 router.get('/allRequest', requestController.getAllRequests);
 router.get('/request/:id', requestController.getRequestById);
-router.patch('/:id/status', requestController.updateRequestStatus);
-router.patch('/:id', requestController.updateRequest);
+router.post('/:id/status', requestController.updateRequestStatus);
+router.post('/:id', requestController.updateRequest);
 router.delete('/:id', requestController.deleteRequest);
 
 //application routes

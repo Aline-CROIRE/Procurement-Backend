@@ -13,7 +13,7 @@ const swaggerDocument = require("./docs/swagger.js");
 const corsOptions = {
   allowedHeaders: ["Authorization", "Content-Type"],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  origin: ["http://localhost:3000", "https://procurement-backend-red.onrender.com/", "http://localhost:5173"],
+  origin: ["http://localhost:3000", "https://procurement-backend-red.onrender.com/", "http://localhost:5173","https://procurement-system-lime.vercel.app/"],
   credentials: true,
 };
 
@@ -29,7 +29,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/", allRoutes);
 
 // Database connectivity
-mongoose.connect("http://localhost:3000", "https://procurement-backend-red.onrender.com/", "http://localhost:5173")
+mongoose.connect("mongodb://localhost:27017/")
   .then(() => {
     console.log('Connected to MongoDB');
   })
