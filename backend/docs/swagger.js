@@ -430,7 +430,7 @@ const swaggerDocument =
                   }
                 }
               }
-            }
+         }
           },
           "404": {
             "description": "User not found"
@@ -439,10 +439,241 @@ const swaggerDocument =
             "description": "Internal server error"
           }
         }
+      },
+      
+    },
+    "/create": {
+      "post": {
+        "summary": "Create a new request",
+        "description": "Create a new procurement request",
+        "tags": ["Request"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Request details",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Request",
+              type:"object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "The title of the what you request"
+                },
+           
+                "description": {
+                  "type": "string",
+                  "description": "The descrption "
+                },
+            
+                "status": {
+                  "type": "string",
+                  "description": "The status of purchase requistion"
+                },
+                "Quantity": {
+                  "type": "string",
+                  "description": "The Quantity of what you are requesting "
+                },
+                
+              }
+            }
+          }
+        ],
+        
+        "responses": {
+          "201": {
+            "description": "Request created"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/allRequest": {
+      "get": {
+        "summary": "Get all requests",
+        "description": "Retrieve a list of all procurement requests",
+        "tags": ["Request"],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Request"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/request/{id}": {
+      "get": {
+        "summary": "Get request by ID",
+        "description": "Retrieve a specific request by ID",
+        "tags": ["Request"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the request to retrieve",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/Request"
+            }
+          },
+          "404": {
+            "description": "Request not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/{id}/status": {
+      "post": {
+        "summary": "Update request status",
+        "description": "Update the status of a specific request",
+        "tags": ["Request"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the request to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "New status of the request",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["Pending", "Approved", "Rejected"],
+                  "description": "The new status of the request"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request status updated successfully"
+          },
+          "400": {
+            "description": "Invalid status"
+          },
+          "404": {
+            "description": "Request not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/request/{id}": {
+      "post": {
+        "summary": "Update request",
+        "description": "Update details of a specific request",
+        "tags": ["Request"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the request to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Updated request details",
+            "required": true,
+            "schema": {
+              type:"object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "The title of the what you request"
+                },
+           
+                "description": {
+                  "type": "string",
+                  "description": "The descrption "
+                },
+            
+                "status": {
+                  "type": "string",
+                  "description": "The status of purchase requistion"
+                },
+                "Quantity": {
+                  "type": "string",
+                  "description": "The Quantity of what you are requesting "
+                },
+            }
+          }}
+        ],
+        "responses": {
+          "200": {
+            "description": "Request updated successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "404": {
+            "description": "Request not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete request",
+        "description": "Delete a specific request",
+        "tags": ["Request"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the request to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request deleted successfully"
+          },
+          "404": {
+            "description": "Request not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
       }
     }
-  
-    
 
     },
     "components": {
@@ -526,7 +757,42 @@ const swaggerDocument =
                 },
                 "required": ["email", "resetToken", "newPassword"]
               }
+        },
+        "Request": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of the request"
+            },
+            "description": {
+              "type": "string",
+              "description": "Description of the request"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["Pending", "Approved", "Rejected"],
+              "default": "Pending",
+              "description": "Status of the request"
+            },
+            "Quantity": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of quantities required"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Creation date of the request"
+            }
+          },
+          "required": ["title", "description", "Quantity"]
         }
+      
     }
+
 }
+
 module.exports= swaggerDocument

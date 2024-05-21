@@ -12,7 +12,7 @@ async function createRequest(req, res) {
       Quantity
     });
 
-    res.status(201).json(request);
+    res.status(201).json("Requistion created successfull!!");
   } catch (error) {
 
     res.status(500).json({ error: 'Internal Server Error' });
@@ -25,6 +25,7 @@ async function getAllRequests(req, res) {
     const requests = await Request.find()
     res.json(requests);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
@@ -89,7 +90,7 @@ async function updateRequest(req, res) {
   
       res.json(request);
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json(error);
     }
   }
   

@@ -108,7 +108,7 @@ const sendResetEmail = async (emailAddress, resetToken) => {
   try {
     // Construct reset password link
     const encodedToken = encodeURIComponent(resetToken);
-    const url = `http://localhost:8080/reset-password/?token=${encodedToken}`;
+    const url = `https://procurement-system-lime.vercel.app/reset-password/?token=${encodedToken}`;
 
     // Create a transporter using SMTP transport
     const transporter = nodemailer.createTransport({
