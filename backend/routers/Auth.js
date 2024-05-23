@@ -7,9 +7,11 @@ const {
   forgotPassword,
   resetPassword,
 } = require("../controller/Auth.controller");
-const {applicant,FormToFill,selectApplication,
-  deleteRejectedApplications, } = require('../controller/Supplier.controller.js')
-  const{tenders,newTender,selectTender,rejectTender}= require('../controller/tender.controller.js')
+const {getApplicants,
+  submitForm,
+  selectApplication, upload,
+  deleteRejectedApplications,} = require('../controller/Supplier.controller.js')
+  const{tenders,newTender,selectTender,uploads,rejectTender,updateTender}= require('../controller/tender.controller.js')
 const UserController = require("../controller/Admin.controller");
 const {
   authMiddleware,
@@ -19,10 +21,10 @@ const {
   isSupplier,
 } = require("../middleware/auth");
 
-// ###############authroutes##############
-
 const requestController = require('../controller/request.controller.js');
 
+
+// ###############authroutes##############
 router.post("/auth/signup", userSignup);
 router.post("/auth/login", userLogin);
 router.post("/auth/logout", userLogout);
@@ -38,28 +40,29 @@ router.put("/user",  UserController.updateUser);
 router.delete("/user",  UserController.deleteUser);
 router.get("/user",  UserController.getAllUser);
 
+//application routes
+router.post('/form',upload.single('cv'), submitForm);
+//router.post('/form', upload.single('cv'), createApplicationForm);
+router.post('/select-application',selectApplication)
+router.post('/reject-application',deleteRejectedApplications)
+router.get('/candidate',getApplicants)
 
+//tenders
+
+router.post('/tender', uploads.single('image'), newTender)
+router.post('/select-tender',selectTender)
+router.post('/reject-tender',rejectTender)
+router.put('/update-tender',updateTender)
+router.get('/tenders',tenders)
 
 // requistion routers
 router.post('/create', requestController.createRequest);
 router.get('/allRequest', requestController.getAllRequests);
 router.get('/request/:id', requestController.getRequestById);
 router.post('/:id/status', requestController.updateRequestStatus);
-router.post('/:id', requestController.updateRequest);
-router.delete('/:id', requestController.deleteRequest);
+router.post('/request/:id', requestController.updateRequest);
+router.delete('/request/:id', requestController.deleteRequest);
 
-//application routes
 
-router.post('/form', FormToFill)
-router.post('/select-application',selectApplication)
-router.post('/reject-application',deleteRejectedApplications)
-router.get('/candidate',applicant)
-
-//tenders
-
-router.post('/tender', newTender)
-router.post('/select-tender',selectTender)
-router.post('/reject-tender',rejectTender)
-router.get('/tenders',tenders)
 module.exports = router;
 
