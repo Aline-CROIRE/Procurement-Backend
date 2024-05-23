@@ -1,442 +1,561 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "title": "Procurement system",
-      "version": "1.0.0",
-      "description": "API Documentation"
+  "swagger": "2.0",
+  "info": {
+    "title": "Procurement system",
+    "version": "1.0.0",
+    "description": "API Documentation"
+  },
+  
+  "basePath": "/",
+  "servers":[
+    {
+     "url":"http://localhost:3000",
+     "description":"Local host"
     },
-    
-    "basePath": "/",
-    "servers":[
-      {
-       "url":"http://localhost:8080",
-       "description":"Local host"
-      },
-      {
-        "url":"https://procurement-backend-3zsr.onrender.com",
-        "description":"Deployment Server"
-       }
-    ],
-    "schemes": [
-      "http",
-      "https"
-    ],
-    "securityDefinitions": {
-      "Bearer": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header",
-        "description": "Enter the token with the `Bearer ` prefix, e.g. \"Bearer abcde12345\"."
-      }
-    },
-    "paths": {
+    {
+      "url":"https://procurement-backend-3zsr.onrender.com",
+      "description":"Deployment Server"
+     }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter the token with the `Bearer ` prefix, e.g. \"Bearer abcde12345\"."
+    }
+  },
+  "paths": {
 "/auth/signup": {
-    "post":{
-        "summary": "Create a new contact",
-        "description": "Create a new contact and add it to the database",
-        "tags": ["Contacts"],
-        "parameters": [
-            {
-              "name": "body",
-              "in": "body",
-              "description": "User details",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "The first name of the user"
+  "post":{
+      "summary": "Create a new contact",
+      "description": "Create a new contact and add it to the database",
+      "tags": ["Contacts"],
+      "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The first name of the user"
+                },
+               
+                "email": {
+                  "type": "string",
+                  "description": "The email address of the user"
+                },
+                
+                  "password": {
+                      "type": "string",
+                      "description": "The password of the user"
                   },
+                  "confirmPassword": {
+                      "type": "string",
+                      "description": "The password of the user"
+                    }
                  
-                  "email": {
-                    "type": "string",
-                    "description": "The email address of the user"
-                  },
-                  
-                    "password": {
-                        "type": "string",
-                        "description": "The password of the user"
-                    },
-                    "confirmPassword": {
-                        "type": "string",
-                        "description": "The password of the user"
-                      }
-                   
-                  
-                  
-                }
+                
+                
               }
             }
-          ],
-          
-          "responses":{
-            "201": {
-              "description": "User created"
-            },
-            "409": {
-              "description": "A user with this email already exists."
-            },
-            "503": {
-              "description": "There was an error processing your request. Please try again later."
-            }
+          }
+        ],
+        
+        "responses":{
+          "201": {
+            "description": "User created"
+          },
+          "409": {
+            "description": "A user with this email already exists."
+          },
+          "503": {
+            "description": "There was an error processing your request. Please try again later."
           }
         }
-      },
+      }
+    },
 
 "/auth/login": {
-  "post": {
-    "summary": "User Login",
-    "description": "Logs in a user with the provided credentials.",
-    "tags": ["Authentication"],
-    "parameters": [
-      {
-        "in": "body",
-        "email": "userData",
-        "description": "User data to log in",
-        "required": true,
-        "schema": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "The email of the user"
-            },
-            "password": {
-              "type": "string",
-              "description": "The password of the user"
+"post": {
+  "summary": "User Login",
+  "description": "Logs in a user with the provided credentials.",
+  "tags": ["Authentication"],
+  "parameters": [
+    {
+      "in": "body",
+      "email": "userData",
+      "description": "User data to log in",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The email of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "The password of the user"
+          }
+        }
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Login successful.",
+      "headers": {
+        "Authorization": {
+          "type": "string",
+          "description": "JWT token for authentication"
+        }
+      },
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "msg": {
+                "type": "string",
+                "description": "Message indicating login success"
+              },
+              "token": {
+                "type": "string",
+                "description": "JWT token for authentication"
+              }
             }
           }
         }
       }
-    ],
-    "responses": {
-      "200": {
-        "description": "Login successful.",
-        "headers": {
-          "Authorization": {
+    },
+    "401": {
+      "description": "Unauthorized. Incorrect password or user not found."
+    },
+    "500": {
+      "description": "Internal server error."
+    }
+  }
+}
+},
+ 
+
+"/forgot-password": {
+"post": {
+  "summary": "Forgot Password",
+  "description": "Initiates the process to reset the password for a user by sending a reset password email.",
+  "tags": ["Authentication"],
+  "parameters": [
+    {
+      "in": "body",
+      "name": "forgotData",
+      "description": "Forgot password data",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "email": {
             "type": "string",
-            "description": "JWT token for authentication"
+            "description": "The email of the user"
           }
+        }
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Reset password email sent."
+    },
+    "404": {
+      "description": "Not found. User with provided email not found."
+    },
+    "500": {
+      "description": "Internal server error."
+    }
+  }
+}
+},
+"/reset-password": {
+"post": {
+  "summary": "Reset Password",
+  "description": "Resets the password for a user with the provided reset token and new password.",
+  "tags": ["Authentication"],
+  "parameters": [
+    {
+      "in": "query",
+      "name": "token",
+      "description": "The reset token received by the user",
+      "required": true,
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "in": "body",
+      "name": "resetData",
+      "description": "Reset password data",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The email of the user"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "The new password for the user"
+          }
+        }
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Password reset successful."
+    },
+    "401": {
+      "description": "Unauthorized. Invalid reset token or token has expired."
+    },
+    "404": {
+      "description": "Not found. User with provided email not found."
+    },
+    "500": {
+      "description": "Internal server error."
+    }
+  }
+}
+},
+"/user": {
+"get": {
+  "summary": "Get all users",
+  "description": "Get a list of all users",
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": ["Admin"],
+  "responses": {
+    "200": {
+      "description": "Successful operation",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "500": {
+      "description": "Internal server error"
+    }
+  }
+},
+"post": {
+  "summary": "Create a new user",
+  "description": "Create a new user",
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": ["Admin"],
+  "parameters": [
+    {
+      "name": "body",
+      "in": "body",
+      "description": "User details",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The first name of the user"
+          },
+     
+          "email": {
+            "type": "string",
+            "description": "The email address of the user"
+          },
+      
+          "password": {
+            "type": "string",
+            "description": "The password of the user"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "description": "The password of the user"
+          },
+          "role": {
+            "type": "string",
+            "description": "The Role of the user"
+          }
+        }
+      }
+    }
+  ],
+  "responses": {
+    "201": {
+      "description": "User created",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "500": {
+      "description": "Internal server error"
+    }
+  }
+},
+
+
+"put": {
+  "summary": "Update User",
+  "description": "Update a user by ID",
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": ["Admin"],
+  "parameters": [
+    {
+      "name": "id",
+      "in": "query",
+      "description": "ID of the user to update",
+      "required": true,
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "body",
+      "in": "body",
+      "description": "New user data",
+      "required": true,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "New name of the user"
+          },
+          "email": {
+            "type": "string",
+            "description": "New email of the user"
+          },
+          "password": {
+            "type": "string",
+            "description": "New password of the user"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["admin", "HOD", "Manager", "supplier"],
+            "description": "New role of the user"
+          }
+        }
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "User updated successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "404": {
+      "description": "User not found"
+    },
+    "500": {
+      "description": "Internal server error"
+    }
+  }
+},
+"delete": {
+  "summary": "Delete User",
+  "description": "Delete a user by ID",
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": ["Admin"],
+  "parameters": [
+    {
+      "name": "id",
+      "in": "query",
+      "description": "ID of the user to delete",
+      "required": true,
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "User deleted successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "404": {
+      "description": "User not found"
+    },
+    "500": {
+      "description": "Internal server error"
+    }
+  }
+}
+},
+
+  "/candidate": {
+    "get": {
+      "summary": "Retrieve all applicants",
+      "description": "Returns a list of all applicants.",
+      "responses": {
+        "200": {
+          "description": "A list of applicants."
         },
+        "404": {
+          "description": "No applicants found."
+        }
+      }
+    }
+  },
+  "/form": {
+    "post": {
+      "summary": "Submit a new application form",
+      "description": "Creates a new application form with the provided details.",
+      "requestBody": {
+        "required": true,
         "content": {
           "application/json": {
             "schema": {
               "type": "object",
               "properties": {
-                "msg": {
-                  "type": "string",
-                  "description": "Message indicating login success"
+                "fullName": {
+                  "type": "string"
                 },
-                "token": {
-                  "type": "string",
-                  "description": "JWT token for authentication"
+                "email": {
+                  "type": "string"
+                },
+                "companyName": {
+                  "type": "string"
+                },
+                "companyAddress": {
+                  "type": "string"
+                },
+                "contactNumber": {
+                  "type": "string"
+                },
+                "cv": {
+                  "type": "string"
+                },
+                "whyHire": {
+                  "type": "string"
                 }
               }
             }
           }
         }
       },
-      "401": {
-        "description": "Unauthorized. Incorrect password or user not found."
-      },
-      "500": {
-        "description": "Internal server error."
-      }
-    }
-  }
-},
-   
-
-"/forgot-password": {
-  "post": {
-    "summary": "Forgot Password",
-    "description": "Initiates the process to reset the password for a user by sending a reset password email.",
-    "tags": ["Authentication"],
-    "parameters": [
-      {
-        "in": "body",
-        "name": "forgotData",
-        "description": "Forgot password data",
-        "required": true,
-        "schema": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "The email of the user"
-            }
-          }
+      "responses": {
+        "201": {
+          "description": "Application form submitted successfully."
+        },
+        "500": {
+          "description": "Internal server error."
         }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "Reset password email sent."
-      },
-      "404": {
-        "description": "Not found. User with provided email not found."
-      },
-      "500": {
-        "description": "Internal server error."
-      }
-    }
-  }
-},
-"/reset-password": {
-  "post": {
-    "summary": "Reset Password",
-    "description": "Resets the password for a user with the provided reset token and new password.",
-    "tags": ["Authentication"],
-    "parameters": [
-      {
-        "in": "query",
-        "name": "token",
-        "description": "The reset token received by the user",
-        "required": true,
-        "schema": {
-          "type": "string"
-        }
-      },
-      {
-        "in": "body",
-        "name": "resetData",
-        "description": "Reset password data",
-        "required": true,
-        "schema": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "The email of the user"
-            },
-            "newPassword": {
-              "type": "string",
-              "description": "The new password for the user"
-            }
-          }
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "Password reset successful."
-      },
-      "401": {
-        "description": "Unauthorized. Invalid reset token or token has expired."
-      },
-      "404": {
-        "description": "Not found. User with provided email not found."
-      },
-      "500": {
-        "description": "Internal server error."
-      }
-    }
-  }
-},
-"/user": {
-  "get": {
-    "summary": "Get all users",
-    "description": "Get a list of all users",
-    "security": [
-      {
-        "Bearer": []
-      }
-    ],
-    "tags": ["Admin"],
-    "responses": {
-      "200": {
-        "description": "Successful operation",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        }
-      },
-      "500": {
-        "description": "Internal server error"
       }
     }
   },
-  "post": {
-    "summary": "Create a new user",
-    "description": "Create a new user",
-    "security": [
-      {
-        "Bearer": []
-      }
-    ],
-    "tags": ["Admin"],
-    "parameters": [
-      {
-        "name": "body",
-        "in": "body",
-        "description": "User details",
-        "required": true,
-        "schema": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "The first name of the user"
-            },
-       
-            "email": {
-              "type": "string",
-              "description": "The email address of the user"
-            },
-        
-            "password": {
-              "type": "string",
-              "description": "The password of the user"
-            },
-            "confirmPassword": {
-              "type": "string",
-              "description": "The password of the user"
-            },
-            "role": {
-              "type": "string",
-              "description": "The Role of the user"
-            }
-          }
+  "/select-application": {
+    "patch": {
+      "summary": "Select an application",
+      "description": "Updates the status of an application to \"selected\".",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "The ID of the application to update."
         }
-      }
-    ],
-    "responses": {
-      "201": {
-        "description": "User created",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
+      ],
+      "responses": {
+        "200": {
+          "description": "Application selected successfully."
+        },
+        "404": {
+          "description": "Application not found."
+        },
+        "500": {
+          "description": "Internal server error."
         }
-      },
-      "500": {
-        "description": "Internal server error"
       }
     }
   },
-  
-  
-  "put": {
-    "summary": "Update User",
-    "description": "Update a user by ID",
-    "security": [
-      {
-        "Bearer": []
-      }
-    ],
-    "tags": ["Admin"],
-    "parameters": [
-      {
-        "name": "id",
-        "in": "query",
-        "description": "ID of the user to update",
-        "required": true,
-        "schema": {
-          "type": "string"
+  "/reject-application": {
+    "post": {
+      "summary": "Delete rejected applications",
+      "description": "Updates the status of an application to \"rejected\" and deletes all applications with this status.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "The ID of the application to update."
         }
-      },
-      {
-        "name": "body",
-        "in": "body",
-        "description": "New user data",
-        "required": true,
-        "schema": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "description": "New name of the user"
-            },
-            "email": {
-              "type": "string",
-              "description": "New email of the user"
-            },
-            "password": {
-              "type": "string",
-              "description": "New password of the user"
-            },
-            "role": {
-              "type": "string",
-              "enum": ["admin", "HOD", "Manager", "supplier"],
-              "description": "New role of the user"
-            }
-          }
+      ],
+      "responses": {
+        "200": {
+          "description": "Rejected applications deleted successfully."
+        },
+        "404": {
+          "description": "Application not found."
+        },
+        "500": {
+          "description": "Internal server error."
         }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "User updated successfully",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "User not found"
-      },
-      "500": {
-        "description": "Internal server error"
-      }
-    }
-  },
-  "delete": {
-    "summary": "Delete User",
-    "description": "Delete a user by ID",
-    "security": [
-      {
-        "Bearer": []
-      }
-    ],
-    "tags": ["Admin"],
-    "parameters": [
-      {
-        "name": "id",
-        "in": "query",
-        "description": "ID of the user to delete",
-        "required": true,
-        "schema": {
-          "type": "string"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "User deleted successfully",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        }
-      },
-      "404": {
-        "description": "User not found"
-      },
-      "500": {
-        "description": "Internal server error"
       }
     }
   }
@@ -444,90 +563,90 @@
 
 
 
-    "components": {
-        "schemas": {
-            "User": {
-                "type": "object",
-                "properties": {
-                  "name":{
-                    "type": "string",
-                    "description": "User's name"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "User's email"
+
+  "components": {
+      "schemas": {
+          "User": {
+              "type": "object",
+              "properties": {
+                "name":{
+                  "type": "string",
+                  "description": "User's name"
                 },
-                "password":{
-                    "type": "string",
-                    "description": "User's password"
-  
-                },
-                "role": {
-                    "type": "string",
-                    "description": "User's role"
-                },
-                "required": ["name", "email", "role"]
+                "email": {
+                  "type": "string",
+                  "description": "User's email"
               },
-            "LoginRequest": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "User's name"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "User's password"
-                  }
-                },
-                "required": ["name", "password"]
+              "password":{
+                  "type": "string",
+                  "description": "User's password"
+
               },
-              "LoginResponse": {
-                "type": "object",
-                "properties": {
-                  "msg": {
-                    "type": "string",
-                    "description": "Message indicating successful login"
-                  },
-                  "token": {
-                    "type": "string",
-                    "description": "JWT token for authentication"
-                  }
-                },
-                "required": ["msg", "token"]
+              "role": {
+                  "type": "string",
+                  "description": "User's role"
               },
-              "ForgotPasswordRequest": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "User's email address"
-                  }
+              "required": ["name", "email", "role"]
+            },
+          "LoginRequest": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "User's name"
                 },
-                "required": ["email"]
+                "password": {
+                  "type": "string",
+                  "description": "User's password"
+                }
               },
-              "ResetPasswordRequest": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "User's email address"
-                  },
-                  "resetToken": {
-                    "type": "string",
-                    "description": "Reset token received by the user"
-                  },
-                  "newPassword": {
-                    "type": "string",
-                    "description": "New password to set"
-                  }
+              "required": ["name", "password"]
+            },
+            "LoginResponse": {
+              "type": "object",
+              "properties": {
+                "msg": {
+                  "type": "string",
+                  "description": "Message indicating successful login"
                 },
-                "required": ["email", "resetToken", "newPassword"]
-              }
-        }
-    }
+                "token": {
+                  "type": "string",
+                  "description": "JWT token for authentication"
+                }
+              },
+              "required": ["msg", "token"]
+            },
+            "ForgotPasswordRequest": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "User's email address"
+                }
+              },
+              "required": ["email"]
+            },
+            "ResetPasswordRequest": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "User's email address"
+                },
+                "resetToken": {
+                  "type": "string",
+                  "description": "Reset token received by the user"
+                },
+                "newPassword": {
+                  "type": "string",
+                  "description": "New password to set"
+                }
+              },
+              "required": ["email", "resetToken", "newPassword"]
+            }
+      }
+  }
 
 }
 }
 
-}

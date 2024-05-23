@@ -20,6 +20,7 @@ const corsOptions = {
 // Server middlewares
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 
 // Serve Swagger documentation
@@ -29,7 +30,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/", allRoutes);
 
 // Database connectivity
-mongoose.connect("mongodb+srv://vanessabewe:crazylegs@cluster0.cqvcu4t.mongodb.net/procure  ")
+mongoose.connect("mongodb+srv://vanessabewe:crazylegs@cluster0.cqvcu4t.mongodb.net/procure")
   .then(() => {
     console.log('Connected to MongoDB');
   })

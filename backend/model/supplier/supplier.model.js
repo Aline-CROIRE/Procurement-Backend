@@ -11,7 +11,7 @@ const applicationFormSchema = new mongoose.Schema({
     companyName: { type: String, required: true },
     companyAddress: { type: String, required: true },
     contactNumber: { type: String, required: true },
-    cv: { type: String }, // Field to store the path or URL of the uploaded CV file
+    cv: { type: String }, 
     whyHire: { type: String, required: true }, // Field to capture the response to "Why should we hire you?" question
     status: { type: String,
         enum: ['selected', 'rejected', 'pending'],
