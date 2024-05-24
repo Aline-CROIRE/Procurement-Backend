@@ -29,9 +29,9 @@ const getApplicants = async (req, res) => {
     try {
         const candidatesSnapshot = await getDocs(collection(db, 'applicants'));
         const candidates = candidatesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        res.status(200).json(candidates);
         const application = new ApplicationForm(candidates);
         await application.save();
+         res.status(200).json(candidates);
     } catch (error) {
         res.status(404).json({ message: "No candidates exist" });
     }
