@@ -27,13 +27,11 @@ const storageRef = getStorage(app);
 // Fetch all applicants
 const getApplicants = async (req, res) => {
     try {
-        const candidatesSnapshot = await getDocs(collection(db, 'applicants'));
-        const candidates = candidatesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const application = new ApplicationForm(candidates);
-        await application.save();
-         res.status(200).json(candidates);
+
+const candidates = await ApplicationForm.find();
+        res.status(200).json(candidates);
     } catch (error) {
-        res.status(404).json({ message: "No candidates exist" });
+        res.status(500).json({ message: "Failed to fetch candidates" });
     }
 };
 
