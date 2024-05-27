@@ -591,7 +591,7 @@ const swaggerDocument =
         }
       }
     },
-    "/request/{id}": {
+    "/update-request": {
       "post": {
         "summary": "Update request",
         "description": "Update details of a specific request",
@@ -649,7 +649,8 @@ const swaggerDocument =
           }
         }
       },
-      "delete": {
+      "/delete-request": {
+        "delete":{
         "summary": "Delete request",
         "description": "Delete a specific request",
         "tags": ["Request"],
@@ -674,6 +675,7 @@ const swaggerDocument =
           }
         }
       }
+    }
     },
 
   
