@@ -7,9 +7,11 @@ const {
   forgotPassword,
   resetPassword,
 } = require("../controller/Auth.controller");
-const {applicant,FormToFill,selectApplication,
-  deleteRejectedApplications, } = require('../controller/Supplier.controller.js')
-  const{tenders,newTender,selectTender,rejectTender}= require('../controller/tender.controller.js')
+const {getApplicants,
+  submitForm,
+  selectApplication, upload,
+  deleteRejectedApplications,} = require('../controller/Supplier.controller.js')
+  const{tenders,newTender,selectTender,uploads,rejectTender,updateTender}= require('../controller/tender.controller.js')
 const UserController = require("../controller/Admin.controller");
 const {
   authMiddleware,
@@ -19,10 +21,10 @@ const {
   isSupplier,
 } = require("../middleware/auth");
 
-// ###############authroutes##############
-
 const requestController = require('../controller/request.controller.js');
 
+
+// ###############authroutes##############
 router.post("/auth/signup", userSignup);
 router.post("/auth/login", userLogin);
 router.post("/auth/logout", userLogout);
@@ -40,6 +42,7 @@ router.get("/user",  UserController.getAllUser);
 
 
 
+
 // requistion routers
 router.post('/create', requestController.createRequest);
 router.get('/allRequest', requestController.getAllRequests);
@@ -48,18 +51,23 @@ router.post('/:id/status', requestController.updateRequestStatus);
 router.post('/update-request', requestController.updateRequest);
 router.delete('/delete-request', requestController.deleteRequest);
 
-//application routes
 
-router.post('/form', FormToFill)
+
+//application routes
+router.post('/form',upload.single('cv'), submitForm);
+//router.post('/form', upload.single('cv'), createApplicationForm);
 router.post('/select-application',selectApplication)
 router.post('/reject-application',deleteRejectedApplications)
-router.get('/candidate',applicant)
+router.get('/candidate',getApplicants)
 
 //tenders
 
-router.post('/tender', newTender)
+router.post('/tender', uploads.single('image'), newTender)
 router.post('/select-tender',selectTender)
 router.post('/reject-tender',rejectTender)
+router.put('/update-tender',updateTender)
 router.get('/tenders',tenders)
+
+
 module.exports = router;
 

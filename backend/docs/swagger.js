@@ -1,35 +1,35 @@
-const swaggerDocument = 
+const swaggerDocument =
 {
-    "swagger": "2.0",
-    "info": {
-      "title": "Procurement system",
-      "version": "1.0.0",
-      "description": "API Documentation"
-    },
+  "swagger": "2.0",
+  "info": {
+    "title": "Procurement system",
+    "version": "1.0.0",
+    "description": "API Documentation"
+  },
  
     
-    "servers":[
-      {
-       "url":"http://localhost:3000",
-       "description":"Local host"
-      },
-      {
-        "url":"https://procurement-backend-red.onrender.com/",
-        "description":"Deployment Server"
-       }
-    ],
-    "schemes": [
-      "http",
-      "https"
-    ],
-    "securityDefinitions": {
-      "Bearer": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header",
-        "description": "Enter the token with the `Bearer ` prefix, e.g. \"Bearer abcde12345\"."
-      }
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local host"
     },
+    {
+      "url": "https://procurement-backend-red.onrender.com/",
+      "description": "Deployment Server"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter the token with the `Bearer ` prefix, e.g. \"Bearer abcde12345\"."
+    }
+  },
   "paths": {
     "/auth/signup": {
       "post": {
@@ -430,7 +430,7 @@ const swaggerDocument =
                   }
                 }
               }
-         }
+            }
           },
           "404": {
             "description": "User not found"
@@ -455,7 +455,7 @@ const swaggerDocument =
             "required": true,
             "schema": {
               "$ref": "#/definitions/Request",
-              type:"object",
+              type: "object",
               "properties": {
                 "title": {
                   "type": "string",
@@ -610,7 +610,7 @@ const swaggerDocument =
             "description": "Updated request details",
             "required": true,
             "schema": {
-              type:"object",
+              type: "object",
               "properties": {
                 "title": {
                   "type": "string",
@@ -630,8 +630,9 @@ const swaggerDocument =
                   "type": "string",
                   "description": "The Quantity of what you are requesting "
                 },
+              }
             }
-          }}
+          }
         ],
         "responses": {
           "200": {
@@ -673,126 +674,371 @@ const swaggerDocument =
           }
         }
       }
-    }
-
     },
-    "components": {
-        "schemas": {
-            "User": {
-                "type": "object",
-                "properties": {
-                    "name":{
-                        "type": "string",
-                        "description": "User's name"
-                      },
-                      "email": {
-                        "type": "string",
-                        "description": "User's email"
-                    },
-                    "password":{
-                        "type": "string",
-                        "description": "User's password"
+
+  
+      "/tenders": {
+        "get": {
+          "summary": "Retrieve all tenders",
+          "description": "Returns a list of all tenders.",
+          "tags": ["Tender"],
+          "responses": {
+            "200": {
+              "description": "A list of tenders."
+            },
+            "404": {
+              "description": "No tenders found."
+            }
+          }
+        }
+    },
       
-                    },
-                    "role": {
-                        "type": "string",
-                        "description": "User's role"
-                    },
-                    "required": ["name", "email", "role"]
+      "/tender": {
+        "post": {
+          "summary": "Submit a new tender",
+          "description": "Creates a new tender with the provided details.",
+          "tags": ["Tender"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "applicationForm",
+              "description": "Application form details",
+              "required": true,
+              
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "Qualification": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "deadline": {
+                    "type": "string"
+                  }
+                
                 }
-              },
-            "LoginRequest": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "description": "User's name"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "User's password"
-                  }
-                },
-                "required": ["name", "password"]
-              },
-              "LoginResponse": {
-                "type": "object",
-                "properties": {
-                  "msg": {
-                    "type": "string",
-                    "description": "Message indicating successful login"
-                  },
-                  "token": {
-                    "type": "string",
-                    "description": "JWT token for authentication"
-                  }
-                },
-                "required": ["msg", "token"]
-              },
-              "ForgotPasswordRequest": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "User's email address"
-                  }
-                },
-                "required": ["email"]
-              },
-              "ResetPasswordRequest": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "description": "User's email address"
-                  },
-                  "resetToken": {
-                    "type": "string",
-                    "description": "Reset token received by the user"
-                  },
-                  "newPassword": {
-                    "type": "string",
-                    "description": "New password to set"
-                  }
-                },
-                "required": ["email", "resetToken", "newPassword"]
               }
-        },
-        "Request": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string",
-              "description": "Title of the request"
+            
+          ],
+          "responses": {
+            "201": {
+              "description": "Tender form submitted successfully."
             },
-            "description": {
-              "type": "string",
-              "description": "Description of the request"
-            },
-            "status": {
-              "type": "string",
-              "enum": ["Pending", "Approved", "Rejected"],
-              "default": "Pending",
-              "description": "Status of the request"
-            },
-            "Quantity": {
-              "type": "array",
-              "items": {
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+      },
+      "/select-tender": {
+        "post": {
+          "summary": "Select a tender",
+          "description": "Updates the status of a tender to 'Approved'.",
+          "tags": ["Tender"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
                 "type": "string"
               },
-              "description": "List of quantities required"
+              "description": "The ID of the tender to update."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Tender selected successfully."
             },
-            "createdAt": {
+            "404": {
+              "description": "Tender not found."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+      },
+      "/reject-tender": {
+        "post": {
+          "summary": "Reject a tender",
+          "description": "Updates the status of a tender to 'Rejected'.",
+          "tags": ["Tender"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The ID of the tender to update."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Tender status updated to rejected."
+            },
+            "404": {
+              "description": "Tender not found."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+    },
+    
+      "/candidate": {
+        "get": {
+          "summary": "Retrieve all applicants",
+          "description": "Returns a list of all applicants.",
+          "tags": ["Application-form"],
+          "responses": {
+            "200": {
+              "description": "A list of applicants."
+            },
+            "404": {
+              "description": "No applicants found."
+            }
+          }
+        }
+      },
+      "/form": {
+        "post": {
+          "summary": "Submit a new application form",
+          "description": "Creates a new application form with the provided details.",
+          "tags": ["Application-form"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "applicationForm",
+              "description": "Application form details",
+              "required": true,
+              
+                
+                "properties": {
+                  "fullName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "companyName": {
+                    "type": "string"
+                  },
+                  "companyAddress": {
+                    "type": "string"
+                  },
+                  "contactNumber": {
+                    "type": "string"
+                  },
+                  "cv": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "whyHire": {
+                    "type": "string"
+                  }
+                }
+              }
+            
+          ],
+
+          "responses": {
+            "201": {
+              "description": "Application form submitted successfully."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+      },
+      "/select-application": {
+        "patch": {
+          "summary": "Select an application",
+          "description": "Updates the status of an application to \"selected\".",
+          "tags": ["Application-form"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The ID of the application to update."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Application selected successfully."
+            },
+            "404": {
+              "description": "Application not found."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+      },
+      "/reject-application": {
+        "post": {
+          "summary": "Delete rejected applications",
+          "description": "Updates the status of an application to \"rejected\" and deletes all applications with this status.",
+          "tags": ["Application-form"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The ID of the application to update."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Rejected applications deleted successfully."
+            },
+            "404": {
+              "description": "Application not found."
+            },
+            "500": {
+              "description": "Internal server error."
+            }
+          }
+        }
+      }
+},
+  
+
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "name": {
               "type": "string",
-              "format": "date-time",
-              "description": "Creation date of the request"
+              "description": "User's name"
+            },
+            "email": {
+              "type": "string",
+              "description": "User's email"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password"
+      
+            },
+            "role": {
+              "type": "string",
+              "description": "User's role"
+            },
+            "required": ["name", "email", "role"]
+          }
+        },
+        "LoginRequest": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "User's name"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password"
             }
           },
-          "required": ["title", "description", "Quantity"]
+          "required": ["name", "password"]
+        },
+        "LoginResponse": {
+          "type": "object",
+          "properties": {
+            "msg": {
+              "type": "string",
+              "description": "Message indicating successful login"
+            },
+            "token": {
+              "type": "string",
+              "description": "JWT token for authentication"
+            }
+          },
+          "required": ["msg", "token"]
+        },
+        "ForgotPasswordRequest": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email address"
+            }
+          },
+          "required": ["email"]
+        },
+        "ResetPasswordRequest": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email address"
+            },
+            "resetToken": {
+              "type": "string",
+              "description": "Reset token received by the user"
+            },
+            "newPassword": {
+              "type": "string",
+              "description": "New password to set"
+            }
+          },
+          "required": ["email", "resetToken", "newPassword"]
         }
+      },
+      "Request": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the request"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the request"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Pending", "Approved", "Rejected"],
+            "default": "Pending",
+            "description": "Status of the request"
+          },
+          "Quantity": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of quantities required"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation date of the request"
+          }
+        },
+        "required": ["title", "description", "Quantity"]
+      }
       
     }
 
-}
+  }
 
 module.exports= swaggerDocument
