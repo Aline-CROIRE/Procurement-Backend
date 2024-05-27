@@ -69,13 +69,13 @@ async function updateRequestStatus(req, res) {
 // Update a purchase requisition
 async function updateRequest(req, res) {
     try {
-      const requestId = req.body
+      const {id }= req.query
       const { title, description, Quantity } = req.body;
   
       
       // Update the purchase requisition
       const request = await Request.findByIdAndUpdate(
-        requestId,
+        id,
         {
           title,
           description,
@@ -97,9 +97,9 @@ async function updateRequest(req, res) {
   // Delete a purchase requisition
   async function deleteRequest(req, res) {
     try {
-      const requestId = req.body
+      const {id }= req.query
   
-      const request = await Request.findByIdAndDelete(requestId);
+      const request = await Request.findByIdAndDelete(id);
   
       if (!request) {
         return res.status(404).json({ error: 'Purchase Requisition not found' });
