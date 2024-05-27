@@ -40,6 +40,19 @@ router.put("/user",  UserController.updateUser);
 router.delete("/user",  UserController.deleteUser);
 router.get("/user",  UserController.getAllUser);
 
+
+
+
+// requistion routers
+router.post('/create', requestController.createRequest);
+router.get('/allRequest', requestController.getAllRequests);
+router.get('/request/:id', requestController.getRequestById);
+router.post('/:id/status', requestController.updateRequestStatus);
+router.post('/update-request', requestController.updateRequest);
+router.delete('/delete-request', requestController.deleteRequest);
+
+
+
 //application routes
 router.post('/form',upload.single('cv'), submitForm);
 //router.post('/form', upload.single('cv'), createApplicationForm);
@@ -54,14 +67,6 @@ router.post('/select-tender',selectTender)
 router.post('/reject-tender',rejectTender)
 router.put('/update-tender',updateTender)
 router.get('/tenders',tenders)
-
-// requistion routers
-router.post('/create', requestController.createRequest);
-router.get('/allRequest', requestController.getAllRequests);
-router.get('/request/:id', requestController.getRequestById);
-router.post('/:id/status', requestController.updateRequestStatus);
-router.post('/request/:id', requestController.updateRequest);
-router.delete('/request/:id', requestController.deleteRequest);
 
 
 module.exports = router;
