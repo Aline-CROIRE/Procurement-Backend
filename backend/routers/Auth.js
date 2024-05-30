@@ -47,7 +47,7 @@ router.get("/user",authMiddleware,isAdmin,  UserController.getAllUser);
 router.post('/create',authMiddleware,isHOD, requestController.createRequest);
 router.get('/allRequest', authMiddleware,isHOD, requestController.getAllRequests);
 router.get('/request/:id',authMiddleware,isHOD,  requestController.getRequestById);
-router.post('/:id/status', authMiddleware,isHOD, requestController.updateRequestStatus);
+router.post('/:id/status', authMiddleware,isAdmin, requestController.updateRequestStatus);
 router.post('/update-request',authMiddleware,isHOD,  requestController.updateRequest);
 router.delete('/delete-request', authMiddleware,isHOD, requestController.deleteRequest);
 
