@@ -45,7 +45,7 @@ router.get("/user",authMiddleware,isAdmin,  UserController.getAllUser);
 
 // requistion routers
 router.post('/create',authMiddleware,isHOD, requestController.createRequest);
-router.get('/allRequest', authMiddleware,isHOD, isAdmin,requestController.getAllRequests);
+router.get('/allRequest',requestController.getAllRequests);
 router.get('/request/:id',authMiddleware,isHOD,  requestController.getRequestById);
 router.post('/:id/status', authMiddleware,isAdmin, requestController.updateRequestStatus);
 router.post('/update-request',authMiddleware,isHOD,  requestController.updateRequest);
@@ -58,7 +58,7 @@ router.post('/form',upload.single('cv'), submitForm);
 //router.post('/form', upload.single('cv'), createApplicationForm);
 router.post('/select-application',authMiddleware,isHOD,selectApplication)
 router.post('/reject-application',authMiddleware,isHOD,deleteRejectedApplications)
-router.get('/candidate',authMiddleware,isHOD,isAdmin,getApplicants)
+router.get('/candidate',getApplicants)
 
 //tenders
 
